@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Запрошення для Софії</title>
+<style>
+body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; background: linear-gradient(to right, #ffe6e6, #fff8f0); }
+h1 { margin-top: 30px; }
+#code-container { display: inline-block; padding:20px; border:3px solid #555; border-radius:15px; font-size:24px; font-family:monospace; letter-spacing:3px; user-select:none; margin-top:30px; background:#fff; }
+#invite { display:none; margin-top:50px; }
+button { padding:10px 20px; margin:10px; font-size:18px; cursor:pointer; border-radius:10px; border:none; background:#ff9999; color:white; }
+button:hover { background:#ff4d4d; }
+#confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<h1>Стерти код, щоб перейти далі</h1>
+<div id="code-container"><span id="code">SECRET-29-08-25</span></div>
+
+<div id="invite">
+  <h2>Софіє, запрошую тебе на побачення 💫</h2>
+  <p>Дата: 29.08.2025</p>
+  <p>Місце: Секретне місце у Львові 😉</p>
+  <button onclick="window.open('zaprosennia_sofii_29-08-2025.pdf','_blank')">Завантажити листівку PDF</button>
+  <button onclick="window.open('date_2025-08-29.ics','_blank')">Додати в календар</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const codeEl = document.getElementById("code");
+  const container = document.getElementById("code-container");
+  let codeText = codeEl.textContent;
+
+  function checkEmpty() {
+    if (codeText.length === 0) {
+      container.style.display = "none";
+      document.getElementById("invite").style.display = "block";
+      startConfetti();
+    }
+  }
+
+  // ПК - Backspace
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      codeText = codeText.slice(0,-1);
+      codeEl.textContent = codeText;
+      checkEmpty();
+    }
+  });
+
+  // Мобільне - тап
+  container.addEventListener("click", function() {
+    if (codeText.length > 0) {
+      codeText = codeText.slice(0,-1);
+      codeEl.textContent = codeText;
+      checkEmpty();
+    }
+  });
+
+  // Простий конфеті ефект
+  function startConfetti() {
+    const canvas = document.getElementById("confetti-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const confettiCount = 100;
+    const confettis = [];
+    for(let i=0;i<confettiCount;i++){
+      confettis.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*6+4, dx:Math.random()*2-1, dy:Math.random()*3+2, color:'hsl('+Math.random()*360+',100%,50%)'});
+    }
+    function render(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      confettis.forEach(c=>{ctx.fillStyle=c.color; ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); ctx.fill(); c.x+=c.dx; c.y+=c.dy; if(c.y>canvas.height){c.y=0;c.x=Math.random()*canvas.width;} });
+      requestAnimationFrame(render);
+    }
+    render();
+  }
+});
+</script>
+</body>
+</html>
